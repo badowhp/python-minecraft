@@ -1,0 +1,35 @@
+# Minecraft Java Paper Server + Geyser + Floodgate Docker Container - Docker Compose
+# Author: James A. Chambers - https://jamesachambers.com/minecraft-java-bedrock-server-together-geyser-floodgate/
+# GitHub Repository: https://github.com/TheRemote/Legendary-Java-Minecraft-Geyser-Floodgate
+
+# To run multiple servers change the volume name under both "volumes" sections and select different ports
+version: "3.5"
+services:
+  minecraftbe:
+    image: 99d6bae830f3
+    restart: "unless-stopped"
+    ports:
+      - 25565:25565
+      - 19132:19132
+      - 19132:19132/udp
+      - 4711:4711
+    volumes:
+      - minecraft:/minecraft
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    entrypoint: [ "/bin/bash", "/scripts/start.sh" ]
+    # Environment variables
+    environment:
+      Port: "25565"
+      BedrockPort: "19132"
+      TZ: "America/Denver" # Timezone
+      #BackupCount: 10 # Number of rolling backups to keep
+      #MaxMemory: 2048 # Maximum memory usage for Java
+      #Version: 1.19.3 # Use custom version
+      #NoBackup: "plugins" # Optional folder to skip during backups
+      #NoPermCheck: "Y" # Optional flag to skip permissions check
+      #QuietCurl: "Y" # Optional flag to reduce curl log output by suppressing progress meter
+      #ScheduleRestart: "3:30" # Optional restart -- specify time in 24 hour format
+volumes:
+  minecraft:
+    driver: local
